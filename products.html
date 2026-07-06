@@ -349,10 +349,13 @@
       // ?variant=enriched sert uniquement de cible de crawl pour le score GEO
       // "APRÈS" (analyzePageGEO de Meikai) ; cedeo-products.json reste toujours
       // la base "AVANT" intacte, jamais écrasée par l'agent.
+      // Chemins relatifs (pas de "/" en tête) : cette page est servie à la fois
+      // à la racine par notre serveur local ET sous un sous-dossier par GitHub
+      // Pages (/mekaii-poc-cedeo-site/), où un chemin absolu casserait.
       const variant = new URLSearchParams(location.search).get('variant');
-      const url = variant === 'enriched' ? '/cedeo-products-enriched.json' : '/cedeo-products.json';
+      const url = variant === 'enriched' ? 'cedeo-products-enriched.json' : 'cedeo-products.json';
       const res = await fetch(url);
-      products = res.ok ? await res.json() : await (await fetch('/cedeo-products.json')).json();
+      products = res.ok ? await res.json() : await (await fetch('cedeo-products.json')).json();
       renderProducts();
     }
 
