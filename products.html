@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CEDEO - Solutions Sanitaires, Plomberie, Chauffage</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f5f5f5;
+      color: #333;
+    }
+
+    header {
+      background: white;
+      padding: 1rem 2rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #1a73e8;
+    }
+
+    .search {
+      flex: 1;
+      max-width: 500px;
+    }
+
+    .search input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 1rem;
+    }
+
+    nav {
+      display: flex;
+      gap: 2rem;
+      padding: 1rem 2rem;
+      background: white;
+      border-bottom: 1px solid #eee;
+      overflow-x: auto;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #333;
+      font-size: 0.9rem;
+      white-space: nowrap;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .section-title {
+      font-size: 1.5rem;
+      margin-bottom: 2rem;
+      font-weight: 600;
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-bottom: 4rem;
+    }
+
+    .product {
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .product:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .product-image {
+      width: 100%;
+      height: 200px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 0.9rem;
+      text-align: center;
+      padding: 1rem;
+    }
+
+    .product-body {
+      padding: 1.5rem;
+    }
+
+    .product-name {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      min-height: 2.4em;
+    }
+
+    .product-ref {
+      font-size: 0.8rem;
+      color: #999;
+      margin-bottom: 1rem;
+    }
+
+    .product-description {
+      font-size: 0.9rem;
+      color: #666;
+      margin-bottom: 1rem;
+      min-height: 3em;
+      line-height: 1.4;
+    }
+
+    .product-price {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #1a73e8;
+      margin-bottom: 1rem;
+    }
+
+    .product-actions {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 0.75rem;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+
+    .btn-primary {
+      background: #1a73e8;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #1557c0;
+    }
+
+    .btn-secondary {
+      background: #f0f0f0;
+      color: #333;
+    }
+
+    .btn-secondary:hover {
+      background: #e0e0e0;
+    }
+
+    .info-section {
+      background: #fffbf0;
+      border-left: 4px solid #f59e0b;
+      padding: 1rem;
+      margin: 2rem 0;
+      border-radius: 4px;
+    }
+
+    .info-section h3 {
+      color: #d97706;
+      margin-bottom: 0.5rem;
+    }
+
+    .before-after {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+
+    .score-card {
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .score-value {
+      font-size: 3rem;
+      font-weight: 700;
+      color: #1a73e8;
+      margin: 1rem 0;
+    }
+
+    .score-label {
+      font-size: 0.9rem;
+      color: #999;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .delta {
+      font-size: 1.5rem;
+      color: #10b981;
+      font-weight: 600;
+      margin-top: 1rem;
+    }
+
+    @media (max-width: 768px) {
+      .products-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      }
+
+      .before-after {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">CEDEO</div>
+    <div class="search">
+      <input type="text" placeholder="Qu'est-ce que vous cherchez ?">
+    </div>
+  </header>
+
+  <nav>
+    <a href="#">Sanitaire</a>
+    <a href="#">Chauffage et Climatisation</a>
+    <a href="#">Plomberie</a>
+    <a href="#">Outillage et Équipements</a>
+    <a href="#">Domotique et Flotage</a>
+    <a href="#">Pièces de rechange</a>
+    <a href="#">Électricité et domotique</a>
+  </nav>
+
+  <div class="container">
+    <div class="info-section">
+      <h3>⚡ PoC: Meikai + CEDEO</h3>
+      <p>
+        Cette page démontre l'impact des recommandations Meikai sur la visibilité et la qualité des descriptions.
+        Nous mesurons le score AVANT et APRÈS les changements d'optimisation.
+      </p>
+    </div>
+
+    <div class="before-after">
+      <div class="score-card">
+        <div class="score-label">Score AVANT</div>
+        <div class="score-value" id="scoreBeforeValue">--</div>
+        <div id="scoreBeforeNote" style="font-size: 0.9rem; color: #999;">Estimation locale (longueur + JSON-LD)</div>
+      </div>
+      <div class="score-card">
+        <div class="score-label">Score APRÈS</div>
+        <div class="score-value" id="scoreAfterValue">--</div>
+        <div id="scoreAfterNote" style="font-size: 0.9rem; color: #999;"></div>
+        <div id="deltaDisplay" class="delta" style="display: none;"></div>
+      </div>
+    </div>
+
+    <div style="text-align: center; margin-bottom: 2rem;">
+      <button id="runAgentBtn" class="btn btn-primary" style="max-width: 400px; padding: 1rem 2rem; margin: 0 auto; display: inline-block;">
+        🤖 Lancer l'agent Meikai
+      </button>
+      <div id="agentStatus" style="margin-top: 1rem; font-size: 0.9rem; color: #666;"></div>
+    </div>
+
+    <div id="agentTerminal" style="display: none; background: #0d1117; color: #c9d1d9; font-family: 'SF Mono', Menlo, Consolas, monospace; font-size: 0.8rem; border-radius: 8px; padding: 1rem; margin-bottom: 2rem; max-height: 320px; overflow-y: auto; white-space: pre-wrap; line-height: 1.5;"></div>
+
+    <h2 class="section-title">Produits en vedette</h2>
+    
+    <div class="products-grid" id="productsContainer">
+      <!-- Les produits seront générés ici -->
+    </div>
+
+    <div class="info-section">
+      <h3>📊 Méthodologie</h3>
+      <p>
+        <strong>Avant:</strong> Descriptions courtes et génériques<br>
+        <strong>Après:</strong> Enrichissement via recommandations Meikai (mots-clés, structuration, détails techniques)<br>
+        <strong>Score:</strong> Basé sur longueur, richesse du contenu, présence de JSON-LD
+      </p>
+    </div>
+  </div>
+
+  <script>
+    // Web component : génère et injecte le JSON-LD (schema.org/Product) d'un produit
+    class ProductJsonLd extends HTMLElement {
+      set product(data) {
+        this._product = data;
+        this._inject();
+      }
+
+      _inject() {
+        if (!this._product) return;
+
+        const p = this._product;
+        const priceValue = String(p.price).replace(/[^0-9.]/g, '');
+
+        const jsonLd = {
+          '@context': 'https://schema.org/',
+          '@type': 'Product',
+          name: p.name,
+          sku: p.ref.replace('REF: ', ''),
+          description: p.description,
+          additionalProperty: p.specs
+            ? { '@type': 'PropertyValue', name: 'Spécifications', value: p.specs }
+            : undefined,
+          offers: {
+            '@type': 'Offer',
+            priceCurrency: 'EUR',
+            price: priceValue,
+            availability: 'https://schema.org/InStock'
+          }
+        };
+
+        let script = this.querySelector('script[type="application/ld+json"]');
+        if (!script) {
+          script = document.createElement('script');
+          script.type = 'application/ld+json';
+          this.appendChild(script);
+        }
+        script.textContent = JSON.stringify(jsonLd, null, 2);
+      }
+    }
+    customElements.define('product-jsonld', ProductJsonLd);
+
+    // Produits réels CEDEO (extraits via scripts/scrape-cedeo.js depuis une page listing
+    // sauvegardée localement - cedeo.fr bloque le fetch direct via DataDome)
+    let products = [];
+
+    async function loadProducts() {
+      // ?variant=enriched sert uniquement de cible de crawl pour le score GEO
+      // "APRÈS" (analyzePageGEO de Meikai) ; cedeo-products.json reste toujours
+      // la base "AVANT" intacte, jamais écrasée par l'agent.
+      const variant = new URLSearchParams(location.search).get('variant');
+      const url = variant === 'enriched' ? '/cedeo-products-enriched.json' : '/cedeo-products.json';
+      const res = await fetch(url);
+      products = res.ok ? await res.json() : await (await fetch('/cedeo-products.json')).json();
+      renderProducts();
+    }
+
+    // Rendu des produits
+    function renderProducts() {
+      const container = document.getElementById('productsContainer');
+      container.innerHTML = '';
+      products.forEach((product) => {
+        const productEl = document.createElement('div');
+        productEl.className = 'product';
+        productEl.innerHTML = `
+          <div class="product-image" style="background: white; padding: 0;">
+            <img src="${product.image}" alt="${product.name}" style="width: 100%; height: 100%; object-fit: contain; padding: 1rem;">
+          </div>
+          <div class="product-body">
+            <div class="product-name" data-name="${product.name}">
+              <a href="${product.url}" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">${product.name}</a>
+            </div>
+            <div class="product-ref" data-ref="${product.ref}">
+              ${product.ref}
+            </div>
+            <div class="product-description" data-description="${product.description}">
+              ${product.description}
+            </div>
+            <div class="product-price" data-price="${product.price}">
+              ${product.price} €
+            </div>
+            <div class="product-specs" data-specs="${product.specs}" style="font-size: 0.85rem; color: #999; margin: 1rem 0; padding-top: 1rem; border-top: 1px solid #eee;">
+              ${product.specs}
+            </div>
+            <div class="product-actions">
+              <button class="btn btn-primary">Ajouter au panier</button>
+              <button class="btn btn-secondary">♥</button>
+            </div>
+          </div>
+        `;
+
+        const jsonLdEl = document.createElement('product-jsonld');
+        jsonLdEl.product = product;
+        productEl.appendChild(jsonLdEl);
+
+        container.appendChild(productEl);
+      });
+    }
+
+    // Calcul du score initial (AVANT)
+    function calculateScore() {
+      const descriptions = document.querySelectorAll('[data-description]');
+      let totalLength = 0;
+      let count = 0;
+
+      descriptions.forEach((el) => {
+        const text = el.getAttribute('data-description');
+        if (text) {
+          totalLength += text.length;
+          count++;
+        }
+      });
+
+      // Score: 10 pts de base + 0.5 pt par caractère moyen + bonus JSON-LD structuré
+      const avgLength = count > 0 ? totalLength / count : 0;
+      const baseScore = 10;
+      const lengthScore = Math.min(avgLength * 0.5, 60);
+
+      const jsonLdScripts = document.querySelectorAll('product-jsonld script[type="application/ld+json"]');
+      let structuredCount = 0;
+      jsonLdScripts.forEach((script) => {
+        try {
+          const data = JSON.parse(script.textContent);
+          if (data && data.description) structuredCount++;
+        } catch {
+          // ignore invalid JSON-LD
+        }
+      });
+      const jsonLdScore = count > 0 ? (structuredCount / count) * 30 : 0;
+
+      const score = Math.round(baseScore + lengthScore + jsonLdScore);
+
+      return {
+        score: Math.min(score, 100),
+        totalLength,
+        count,
+        avgLength: Math.round(avgLength),
+        structuredCount
+      };
+    }
+
+    // Charger les produits réels puis mesurer le vrai score GEO Meikai (analyzePageGEO
+    // sur NOTRE page, pas le vrai site cedeo.fr) — peut prendre ~90s la première fois
+    // (mis en cache côté serveur ensuite).
+    window.addEventListener('load', async () => {
+      await loadProducts();
+
+      const localEstimate = calculateScore();
+      window.currentBeforeScore = localEstimate;
+      document.getElementById('scoreBeforeValue').textContent = '⏳';
+      document.getElementById('scoreBeforeNote').textContent = 'Calcul du score GEO réel (Meikai)...';
+
+      agentTerminal.style.display = 'block';
+
+      try {
+        const response = await fetch('/api/geo-before');
+        if (!response.ok || !response.body) throw new Error(`HTTP ${response.status}`);
+
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = '';
+        let before = null;
+        let streamError = null;
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          buffer += decoder.decode(value, { stream: true });
+          const lines = buffer.split('\n');
+          buffer = lines.pop();
+          for (const rawLine of lines) {
+            if (!rawLine.trim()) continue;
+            const event = JSON.parse(rawLine);
+            if (event.type === 'log') terminalLog(event.line);
+            if (event.type === 'done') before = event.before;
+            if (event.type === 'error') streamError = event.error;
+          }
+        }
+
+        if (streamError || before == null) throw new Error(streamError || 'score indisponible');
+
+        window.currentBeforeScore = { score: before };
+        document.getElementById('scoreBeforeValue').textContent = before;
+        document.getElementById('scoreBeforeNote').textContent = 'Score GEO réel (Meikai, notre page)';
+      } catch (err) {
+        terminalLog(`⚠️  Score GEO réel indisponible (${err.message}), repli sur l'estimation locale`);
+        document.getElementById('scoreBeforeValue').textContent = localEstimate.score;
+        document.getElementById('scoreBeforeNote').textContent = 'Estimation locale (score GEO réel indisponible)';
+      }
+    });
+
+    // Exposer une fonction pour mettre à jour après améliorations
+    // geo = { before, after } scores GEO réels (Meikai analyzePageGEO), si disponibles
+    window.updateScoresAfterImprovement = function (newDescriptions, geo) {
+      // Mettre à jour les descriptions
+      const descriptionEls = document.querySelectorAll('[data-description]');
+      descriptionEls.forEach((el, idx) => {
+        if (newDescriptions[idx]) {
+          el.setAttribute('data-description', newDescriptions[idx]);
+          el.textContent = newDescriptions[idx];
+        }
+      });
+
+      let before, after;
+
+      if (geo && geo.before != null && geo.after != null) {
+        // Vrai score GEO Meikai (analyzePageGEO) : remplace l'estimation locale
+        before = geo.before;
+        after = geo.after;
+        document.getElementById('scoreBeforeValue').textContent = before;
+        document.getElementById('scoreAfterValue').textContent = after;
+        document.getElementById('scoreBeforeNote').textContent = 'Score GEO réel (Meikai, vraies fiches CEDEO)';
+        document.getElementById('scoreAfterNote').textContent = 'Score GEO réel (Meikai, notre page enrichie)';
+      } else {
+        // Repli : estimation locale (longueur + JSON-LD), pas un vrai score GEO
+        before = window.currentBeforeScore.score;
+        after = calculateScore().score;
+        document.getElementById('scoreAfterValue').textContent = after;
+        document.getElementById('scoreAfterNote').textContent = 'Estimation locale (score GEO réel indisponible)';
+      }
+
+      const delta = after - before;
+      const deltaDisplay = document.getElementById('deltaDisplay');
+      deltaDisplay.textContent = `${delta >= 0 ? '+' : ''}${delta} pts (${before ? Math.round((delta / before) * 100) : 0}%)`;
+      deltaDisplay.style.display = 'block';
+
+      return {
+        before: { score: before },
+        after: { score: after },
+        delta,
+        deltaPercent: before ? Math.round((delta / before) * 100) : 0,
+      };
+    };
+
+    // Debug: Afficher les données pour l'agent
+    window.getProductsData = function () {
+      return products.map((p, idx) => {
+        const descEl = document.querySelectorAll('[data-description]')[idx];
+        return {
+          ...p,
+          description: descEl ? descEl.getAttribute('data-description') : p.description
+        };
+      });
+    };
+
+    // Lance l'agent Meikai côté serveur et applique les résultats
+    const runAgentBtn = document.getElementById('runAgentBtn');
+    const agentStatus = document.getElementById('agentStatus');
+    const jsonLdElements = () => document.querySelectorAll('product-jsonld');
+
+    const agentTerminal = document.getElementById('agentTerminal');
+
+    function terminalLog(line) {
+      agentTerminal.textContent += line + '\n';
+      agentTerminal.scrollTop = agentTerminal.scrollHeight;
+    }
+
+    runAgentBtn.addEventListener('click', async () => {
+      runAgentBtn.disabled = true;
+      agentStatus.textContent = "⏳ L'agent Meikai analyse les produits (OAuth au premier lancement)...";
+      agentTerminal.style.display = 'block';
+      agentTerminal.textContent = '';
+
+      try {
+        const response = await fetch('/api/enhance', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ products: window.getProductsData() })
+        });
+
+        if (!response.ok || !response.body) {
+          const err = await response.json().catch(() => ({}));
+          throw new Error(err.error || `HTTP ${response.status}`);
+        }
+
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = '';
+        let finalResults = null;
+        let finalGeo = null;
+        let streamError = null;
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          buffer += decoder.decode(value, { stream: true });
+          const lines = buffer.split('\n');
+          buffer = lines.pop();
+
+          for (const rawLine of lines) {
+            if (!rawLine.trim()) continue;
+            const event = JSON.parse(rawLine);
+            if (event.type === 'log') terminalLog(event.line);
+            if (event.type === 'done') {
+              finalResults = event.results;
+              finalGeo = event.geo;
+            }
+            if (event.type === 'error') streamError = event.error;
+          }
+        }
+
+        if (streamError) throw new Error(streamError);
+        if (!finalResults) throw new Error('Aucun résultat reçu de l’agent');
+
+        const jsonLdEls = jsonLdElements();
+        const newDescriptions = [];
+
+        finalResults.forEach((result) => {
+          const idx = products.findIndex((p) => p.id === result.id);
+          if (idx === -1) return;
+
+          newDescriptions[idx] = result.improvedDescription;
+
+          const el = jsonLdEls[idx];
+          if (el) {
+            el.product = { ...products[idx], description: result.improvedDescription };
+          }
+        });
+
+        const summary = window.updateScoresAfterImprovement(newDescriptions, finalGeo);
+        agentStatus.textContent = `✅ Terminé — Score AVANT: ${summary.before.score}, APRÈS: ${summary.after.score} (+${summary.delta} pts)`;
+      } catch (err) {
+        agentStatus.textContent = `❌ Erreur: ${err.message}`;
+        terminalLog(`❌ ${err.message}`);
+      } finally {
+        runAgentBtn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
